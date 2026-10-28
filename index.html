@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tapi District Social Search</title>
+<style>
+:root{--bg:#080e1b;--panel:#111b2e;--line:#293750;--text:#f1f5ff;--muted:#aab7ce;--violet:#8068ff;--cyan:#31d7e9}
+*{box-sizing:border-box}body{margin:0;color:var(--text);font-family:Inter,"Noto Sans Gujarati",system-ui,sans-serif;background:radial-gradient(ellipse at 8% 0%,#29245c 0,transparent 32%),radial-gradient(ellipse at 100% 10%,#104457 0,transparent 27%),var(--bg);min-height:100vh}
+.wrap{max-width:1200px;margin:auto;padding:24px 18px 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px;font-weight:850}.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--violet),var(--cyan));box-shadow:0 10px 28px #635bff44}.subbrand{font-size:11px;color:var(--muted);font-weight:500}.status{border:1px solid var(--line);border-radius:99px;padding:8px 12px;font-size:12px;color:#c8d6ef;background:#ffffff07}
+.hero{text-align:center;padding:40px 0 25px}.eyebrow{font-size:12px;letter-spacing:2px;color:#aaa0ff;font-weight:800;text-transform:uppercase}h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:13px 0;background:linear-gradient(90deg,#fff,#c7caff,#7debf2);background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:750px;margin:0 auto;line-height:1.7;font-size:14px}
+.panel{border:1px solid var(--line);border-radius:24px;background:linear-gradient(155deg,#16213aee,#0f1728f2);padding:22px;box-shadow:0 24px 70px #0003}.paneltitle{font-weight:800;font-size:16px;margin:0 0 17px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:12px;font-weight:750;color:#cad5ea;margin-bottom:8px}input,select{width:100%;padding:13px 14px;border-radius:13px;background:#091326;color:var(--text);border:1px solid #35435f;font:inherit;outline:none}input:focus,select:focus{border-color:#8b7bff;box-shadow:0 0 0 3px #8068ff22}.wide{grid-column:1/-1}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 16px;color:var(--text);background:#ffffff08;font-weight:750;cursor:pointer}.btn.primary{border:0;background:linear-gradient(100deg,var(--violet),#477ff7);box-shadow:0 8px 24px #655bff33}.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}.hint{font-size:12px;line-height:1.6;color:#91a2c2;margin-top:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.stat{padding:15px;border:1px solid var(--line);border-radius:17px;background:#ffffff06}.stat strong{font-size:21px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:27px 2px 13px}.heading h2{font-size:18px;margin:0}.heading small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.platform{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid var(--line);background:#ffffff07;color:var(--text);border-radius:17px;padding:15px;cursor:pointer;min-width:0}.platform:hover{border-color:#7e70ff;background:#ffffff0d}.picon{height:43px;width:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;font-size:19px;font-weight:900}.platform strong{display:block;font-size:14px}.platform small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.google .picon{background:#fff;color:#4285f4}.instagram .picon{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}.facebook .picon{background:#1877f2}.youtube .picon{background:#ff1238}.xnet .picon{background:#050505;border:1px solid #555}.telegram .picon{background:#229ed9}.tips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}.tip{border:1px solid var(--line);border-radius:17px;background:#ffffff05;padding:17px}.tip h3{margin:0 0 8px;font-size:14px}.tip p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}footer{text-align:center;color:#7484a4;font-size:11px;line-height:1.7;margin-top:25px}
+#developerWarning{display:none;position:fixed;inset:0;z-index:99999;background:rgba(3,7,19,.96);align-items:center;justify-content:center;padding:22px;text-align:center;backdrop-filter:blur(10px)}
+#developerWarning.show{display:flex;animation:warningFade .25s ease-out}
+.warningContent{width:min(100%,700px);padding:32px 24px;border:1px solid #8068ff;border-radius:24px;background:linear-gradient(145deg,#171d3b,#091326);box-shadow:0 0 55px #8068ff55}
+.warningContent h2{font-size:clamp(25px,5vw,42px);margin:0 0 20px;color:#ff7d9c}
+.warningText{min-height:3em;color:#7debf2;font-size:clamp(18px,3.5vw,28px);font-weight:800;line-height:1.6;overflow-wrap:anywhere}
+.warningCursor{display:inline-block;color:#fff;animation:cursorBlink .7s steps(2,start) infinite}
+@keyframes warningFade{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+@keyframes cursorBlink{to{visibility:hidden}}
+.overlay{display:none;position:fixed;inset:0;z-index:99;background:#030713e8;backdrop-filter:blur(8px);padding:18px;align-items:center;justify-content:center}.overlay.open{display:flex}.modal{width:min(100%,900px);max-height:90vh;display:flex;flex-direction:column;background:#0f192b;border:1px solid #354461;border-radius:22px;box-shadow:0 30px 100px #0009;overflow:hidden}.modalhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}.modalhead strong{font-size:16px}.modalhead p{margin:5px 0 0;color:var(--muted);font-size:12px}.close{border:1px solid var(--line);background:#ffffff0a;color:white;border-radius:11px;padding:9px 12px;cursor:pointer;font-size:18px}.modalbody{padding:16px;overflow:auto}.notice{border:1px solid #6653b7;background:#8068ff14;border-radius:14px;padding:13px;color:#d8d2ff;font-size:12px;line-height:1.65;margin-bottom:14px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tab{border:1px solid var(--line);background:#ffffff08;color:#e8edff;border-radius:10px;padding:9px 12px;cursor:pointer}.tab.active{background:#8068ff2a;border-color:#8b7bff}.querybox{word-break:break-word;color:#d4ddf5;background:#ffffff08;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13px;margin:10px 0}.resultlist{display:grid;gap:10px}.result{border:1px solid var(--line);background:#ffffff05;border-radius:14px;padding:14px}.result strong{display:block;font-size:14px;margin-bottom:6px}.result p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}.result .url{color:#8edcff;word-break:break-word;font-size:12px;margin-top:8px}.openlink{display:inline-block;color:#bcb2ff;font-size:12px;margin-top:9px;text-decoration:none}.openlink:hover{text-decoration:underline}.empty{padding:16px;border:1px dashed #455472;border-radius:14px;color:var(--muted);font-size:13px;line-height:1.7}.footnote{font-size:11px;color:#8596b7;margin-top:12px}
+@media(max-width:740px){.grid{grid-template-columns:repeat(2,1fr)}.fields,.tips{grid-template-columns:1fr}.wide{grid-column:auto}.stats{grid-template-columns:1fr 1fr}.panel{padding:16px}.hero{padding-top:30px}}
+@media(max-width:460px){.grid{grid-template-columns:1fr}.status{display:none}.wrap{padding:16px 12px 35px}.stats{grid-template-columns:1fr 1fr}.modal{max-height:95vh}}
+</style></head>
+<body><div class="wrap">
+<header class="top"><div class="brand"><div class="logo">⌕</div><div>TAPI SOCIAL SEARCH<div class="subbrand">Public content discovery dashboard</div></div></div><div class="status">● Tapi District · Gujarat</div></header>
+<section class="hero"><div class="eyebrow">District-focused public search</div><h1>Tapi District<br>Social Media Search</h1><p>તાપી જિલ્લાના તાલુકા અથવા ગામને પસંદ કરો, keyword / hashtag લખો અને શોધ માટે તૈયાર query આ જ પેજના popup માં જુઓ.</p></section>
+<section class="panel"><h2 class="paneltitle">⌕ શોધની વિગતો</h2><div class="fields">
+<div class="field"><label for="taluka">તાલુકો પસંદ કરો</label><select id="taluka"><option value="Tapi district Gujarat">સમગ્ર તાપી જિલ્લો — બધા તાલુકા</option><option>Vyara</option><option>Songadh</option><option>Valod</option><option>Uchchhal</option><option>Dolvan</option><option>Kukarmunda</option><option>Nizar</option></select></div>
+<div class="field"><label for="village">ગામ / વિસ્તાર (વૈકલ્પિક)</label><input id="village" placeholder="જેમ કે Songadh, Vyara અથવા ગામનું નામ"></div>
+<div class="field wide"><label for="query">Keyword, hashtag અથવા પોસ્ટનું લખાણ</label><input id="query" placeholder="જેમ કે cyber fraud, #Tapi, જાહેર પોસ્ટના શબ્દો"></div>
+<div class="field"><label for="kind">શું શોધવું છે?</label><select id="kind"><option value="">બધું જાહેર content</option><option value="post">Post / photo</option><option value="reel">Reel / video</option><option value="news">News / public webpage</option><option value="account">Account / page name</option></select></div>
+<div class="field"><label for="period">સમયનો શબ્દ (વૈકલ્પિક)</label><select id="period"><option value="">કોઈપણ સમય</option><option value="today latest">આજે / latest</option><option value="past week">છેલ્લા 7 દિવસ</option><option value="past month">છેલ્લા 30 દિવસ</option></select></div>
+</div><div class="actions"><button class="btn primary" id="searchBtn">⌕ આ પેજમાં શોધો</button><button class="btn" id="resetBtn">રીસેટ કરો</button></div><div class="hint">તાલુકા/ગામનું નામ અને keyword આધારે query તૈયાર થાય છે. કોઈ બહારની સાઇટ popup ની અંદર embed થતી નથી, તેથી “refused to connect” error નહીં આવે.</div>
+<div class="stats"><div class="stat"><strong>જિલ્લા-વ્યાપી</strong><span>બધા તાલુકા માટે query</span></div><div class="stat"><strong>Public</strong><span>જાહેર સામગ્રી માટે</span></div><div class="stat"><strong>Free</strong><span>HTML · CSS · JavaScript</span></div></div></section>
+<div class="heading"><h2>પ્લેટફોર્મ પસંદ કરો</h2><small>પરિણામ popup માં</small></div>
+<section class="grid">
+<button class="platform google" data-platform="google"><span class="picon">G</span><span><strong>Google Web</strong><small>Public web search query</small></span></button>
+<button class="platform instagram" data-platform="instagram"><span class="picon">◎</span><span><strong>Instagram</strong><small>Indexed public posts / reels</small></span></button>
+<button class="platform facebook" data-platform="facebook"><span class="picon">f</span><span><strong>Facebook</strong><small>Indexed public pages / posts</small></span></button>
+<button class="platform youtube" data-platform="youtube"><span class="picon">▶</span><span><strong>YouTube</strong><small>Public video search query</small></span></button>
+<button class="platform xnet" data-platform="x"><span class="picon">𝕏</span><span><strong>X</strong><small>Public post search query</small></span></button>
+<button class="platform telegram" data-platform="telegram"><span class="picon">➤</span><span><strong>Telegram</strong><small>Indexed public channels</small></span></button>
+</section>
+<section class="tips"><div class="tip"><h3>🗺️ તાપીના વિસ્તાર</h3><p>જિલ્લા-વ્યાપી query માં Vyara, Songadh, Valod, Uchchhal, Dolvan, Kukarmunda અને Nizar જેવા નામો જોડાય છે. Ukai સામાન્ય રીતે Songadh વિસ્તાર સાથે શોધી શકાય. ગામનું spelling ગુજરાતી અને અંગ્રેજી બંનેમાં અજમાવો.</p></div><div class="tip"><h3>🔐 મર્યાદા</h3><p>આ પેજ external websites માંથી live posts scrape કરતું નથી. API વગર actual live results આપમેળે મેળવવા શક્ય નથી. Popup માં search query અને source ખોલવાની વૈકલ્પિક લિંક દેખાશે.</p></div></section>
+<footer>Unofficial free search interface · No PHP / No database / No API<br>જાહેર શોધ માટે; private accounts અથવા messages સુધી ઍક્સેસ નથી.<br><br>Design and Develop by <strong>Er. Krunal Gamit</strong></footer>
+</div>
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><section class="modal"><header class="modalhead"><div><strong id="modalTitle">Search query</strong><p id="modalSub">Tapi District · public search</p></div><button class="close" id="closeModal" aria-label="Close popup">✕</button></header><div class="modalbody"><div class="notice">આ ફ્રી HTML વર્ઝન popup ની અંદર શોધ query તૈયાર કરે છે. API/backend વગર Google અથવા social media ના live results સીધા અહીં લાવી શકાતા નથી. નીચેની લિંક દબાવશો તો પસંદ કરેલી સાઇટ નવી tab માં ખુલશે.</div><div class="tabs" id="tabs"></div><div class="querybox" id="queryPreview"></div><div id="resultList" class="resultlist"></div><div class="footnote">આ પરિણામો live fetched posts નથી; તે query અને source shortcuts છે. દરેક સાઇટના પોતાના search rules લાગુ પડે છે.</div></div></section></div>
+<div id="developerWarning" role="alertdialog" aria-modal="true" aria-labelledby="developerWarningTitle"><div class="warningContent"><h2 id="developerWarningTitle">⚠️ Developer Mode!</h2><div class="warningText"><span id="warningTypedText"></span><span class="warningCursor">▋</span></div></div></div>
+<script>
+const $=id=>document.getElementById(id);
+let activePlatform='google';
+const platformInfo={
+ google:{label:'Google Web',url:q=>'https://www.google.com/search?q='+encodeURIComponent(q)},
+ instagram:{label:'Instagram · Google indexed',url:q=>'https://www.google.com/search?q='+encodeURIComponent('site:instagram.com '+q)},
+ facebook:{label:'Facebook · Google indexed',url:q=>'https://www.google.com/search?q='+encodeURIComponent('(site:facebook.com OR site:fb.com) '+q)},
+ youtube:{label:'YouTube',url:q=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q)},
+ x:{label:'X',url:q=>'https://x.com/search?q='+encodeURIComponent(q)},
+ telegram:{label:'Telegram · Google indexed',url:q=>'https://www.google.com/search?q='+encodeURIComponent('site:t.me '+q)}
+};
+function buildQuery(){
+ const taluka=$('taluka').value,village=$('village').value.trim(),words=$('query').value.trim(),kind=$('kind').value,period=$('period').value;
+ let area=taluka==='Tapi district Gujarat'?'Tapi district Gujarat (Vyara OR Songadh OR Valod OR Uchchhal OR Dolvan OR Kukarmunda OR Nizar OR Ukai)':taluka+' Tapi Gujarat';
+ if(village) area+=''+' "'+village+'"';
+ let parts=[area]; if(words)parts.push(words); if(kind==='post')parts.push('post photo');if(kind==='reel')parts.push('reel video');if(kind==='news')parts.push('news');if(kind==='account')parts.push('account page');if(period)parts.push(period);
+ return parts.join(' ');
+}
+function safeText(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function openModal(platform){
+ activePlatform=platform;const q=buildQuery(),info=platformInfo[platform],url=info.url(q);
+ $('overlay').classList.add('open');document.body.style.overflow='hidden';$('modalTitle').textContent=info.label;$('modalSub').textContent='Tapi District · public search';
+ $('queryPreview').innerHTML='<b>Search query:</b><br>'+safeText(q);
+ $('tabs').innerHTML='';Object.keys(platformInfo).forEach(key=>{const b=document.createElement('button');b.className='tab'+(key===platform?' active':'');b.textContent=platformInfo[key].label;b.onclick=()=>openModal(key);$('tabs').appendChild(b);});
+ $('resultList').innerHTML='<div class="result"><strong>1. તમારી search query</strong><p>આ શબ્દો પસંદ કરેલા search provider માં શોધવા માટે તૈયાર છે.</p><div class="url">'+safeText(q)+'</div><button class="btn" id="copyQuery" style="margin-top:10px">Query copy કરો</button></div><div class="result"><strong>2. '+safeText(info.label)+' માં શોધો</strong><p>સંબંધિત public results જોવા માટે search provider ખોલો. આ ફ્રી HTML એકલું live post data fetch કરતું નથી.</p><a class="openlink" href="'+url.replace(/&/g,'&amp;')+'" target="_blank" rel="noopener noreferrer">Search source નવી tab માં ખોલો ↗</a></div>';
+ $('copyQuery').onclick=async()=>{try{await navigator.clipboard.writeText(q);$('copyQuery').textContent='Copied ✓';}catch(e){$('copyQuery').textContent='Copy ન થયું — query ઉપરથી select કરો';}};
+}
+function closeModal(){$('overlay').classList.remove('open');document.body.style.overflow='';}
+$('searchBtn').addEventListener('click',()=>openModal('google'));document.querySelectorAll('[data-platform]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.platform)));
+$('closeModal').addEventListener('click',closeModal);$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))closeModal();});let warningShown=false;
+function showDeveloperWarning(){
+ if(warningShown)return;
+ warningShown=true;
+ const warning=$('developerWarning');
+ const typed=$('warningTypedText');
+ const message='Bhai tu noob che! Code sikhva ni training le am lakhni! 😎';
+ warning.classList.add('show');
+ typed.textContent='';
+ let i=0;
+ const typeNext=()=>{if(i<message.length){typed.textContent+=message.charAt(i++);setTimeout(typeNext,55);}};
+ typeNext();
+}
+// Right-click menu disable (does not protect source code).
+document.addEventListener('contextmenu',e=>e.preventDefault());
+// Keyboard shortcut detection is best-effort; browsers may handle DevTools differently.
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')closeModal();
+ const key=e.key.toLowerCase();
+ const devShortcut=e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(key))||(e.ctrlKey&&key==='u');
+ if(devShortcut){e.preventDefault();showDeveloperWarning();}
+});
+// Best-effort detection when DevTools is docked and changes the window size.
+setInterval(()=>{
+ const widthGap=window.outerWidth-window.innerWidth;
+ const heightGap=window.outerHeight-window.innerHeight;
+ if(widthGap>250||heightGap>250)showDeveloperWarning();
+},1000);
+$('resetBtn').addEventListener('click',()=>{$('taluka').value='Tapi district Gujarat';$('village').value='';$('query').value='';$('kind').value='';$('period').value='';});
+$('query').addEventListener('keydown',e=>{if(e.key==='Enter')openModal('google');});
+</script></body></html>
